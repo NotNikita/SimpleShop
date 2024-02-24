@@ -5,9 +5,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build": "npx tsc",
+    "build": "yarn tsc",
     "dev": "tsx watch src/server.ts",
-    "start": "npm run build & node dist/server.js",
+    "start": "yarn build & node dist/server.js",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
