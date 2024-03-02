@@ -10,6 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (_, res: Response) => {
+  console.log("--Main endpoints called");
   res.status(200).send("All good to go!");
 });
 
