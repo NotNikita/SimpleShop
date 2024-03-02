@@ -4,6 +4,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": "20.x",
+    "yarn": "1.22.21"
+  },
   "scripts": {
     "build": "yarn tsc",
     "dev": "tsx watch src/server.ts",
@@ -27,5 +31,15 @@
     "ts-node": "^10.9.2",
     "tsx": "^4.7.1",
     "typescript": "^5.3.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NotNikita/SimpleShop"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "license": "MIT"
 }
