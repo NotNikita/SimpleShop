@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 .env
+db-urls.txt
 
 # testing
 /coverage
