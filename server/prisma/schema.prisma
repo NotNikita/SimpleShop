@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+
+// Quick shortcut to generate anything: Ctrl + Space
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Shop {
+  id        String     @id @default(uuid())
+  location  String
+  customers Customer[]
+  employees Employee[]
+}
+
+model Product {
+  id           String @id @default(uuid())
+  title        String
+  description  String
+  manufacturer String
+  rating       Float
+}
+
+model Customer {
+  id         String       @id @default(uuid())
+  name       String
+  email      String       @unique
+  phone      String       @unique
+  isVerified Boolean      @default(false)
+  tier       CustomerTier @default(DEFAULT)
+
+  // Foreign keys
+  shopId        String
+  favouriteShop Shop   @relation(fields: [shopId], references: [id])
+}
+
+model Employee {
+  id       String   @id @default(uuid())
+  name     String
+  surname  String
+  position Position
+  phone    String   @unique
+
+  Shop        Shop   @relation(fields: [workplaceId], references: [id])
+  workplaceId String
+}
+
+enum CustomerTier {
+  DEFAULT // 0% rabat
+  EXPERIENCED // 5% rabat
+  BELOVED // 10%
+}
+
+enum Position {
+  DIRECTOR
+  MANAGER
+  CASHIER
+}
