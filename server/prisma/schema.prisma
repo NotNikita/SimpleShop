@@ -11,53 +11,67 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Shop {
-  id        String     @id @default(uuid())
-  location  String
-  customers Customer[]
-  employees Employee[]
+// Users, Movies, Reviews, Genres, Favourites, Watch History
+model User {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  password_hash String
+  isVerified    Boolean  @default(false)
+  tier          UserTier @default(DEFAULT)
+
+  // Arrays
+  watchlist WatchList[]
 }
 
-model Product {
-  id           String @id @default(uuid())
-  title        String
-  description  String
-  manufacturer String
-  rating       Float
+// UsersOnContent
+model WatchList {
+  user_id          String
+  content_id       String
+  watched_at       DateTime
+  duration_watched DateTime
+
+  user    User    @relation(fields: [user_id], references: [id])
+  content Content @relation(fields: [content_id], references: [id])
+
+  @@id([user_id, content_id])
 }
 
-model Customer {
-  id         String       @id @default(uuid())
-  name       String
-  email      String       @unique
-  phone      String       @unique
-  isVerified Boolean      @default(false)
-  tier       CustomerTier @default(DEFAULT)
+// Movie or MovieSeries
+model Content {
+  id               String   @id @default(uuid())
+  title            String
+  duration_minutes Int
+  description      String
+  // will be separated into categories by FE
+  cast             Person[]
+  release          DateTime
 
-  // Foreign keys
-  shopId        String
-  favouriteShop Shop   @relation(fields: [shopId], references: [id])
+  // TODO: genres - can be a tag and implement tag search
+  WatchList WatchList[]
 }
 
-model Employee {
-  id       String   @id @default(uuid())
-  name     String
-  surname  String
-  position Position
-  phone    String   @unique
-
-  Shop        Shop   @relation(fields: [workplaceId], references: [id])
-  workplaceId String
+// Director, Actor, Writer...
+model Person {
+  id        String    @id @default(uuid())
+  fullname  String
+  // in which movies he participated and how
+  known_for Content[]
 }
 
-enum CustomerTier {
-  DEFAULT // 0% rabat
-  EXPERIENCED // 5% rabat
+enum UserTier {
+  DEFAULT // 0% discount
+  VIP // 5% discount
   BELOVED // 10%
+
+  @@map("CustomerTier")
 }
 
+// TODO: Need to be tier between Person and Content
+// (which role human done in film)
 enum Position {
+  PRODUCER
   DIRECTOR
-  MANAGER
-  CASHIER
+  WRITER
+  ACTOR
 }
